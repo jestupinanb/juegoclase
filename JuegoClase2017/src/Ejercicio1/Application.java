@@ -9,13 +9,13 @@ import javax.swing.JFrame;
 public class Application extends JFrame {
     
     public Application() {
-        initUI();
+       initUI();
     }
 
     private void initUI() {
         add(new Board());
-        setSize(250, 200);
-        setTitle("Ejercicio 1");
+        setSize(1024, 512);
+        setTitle("Ejercicio 0");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
     }    

@@ -13,42 +13,84 @@ import java.awt.event.ActionListener;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-public class Board extends JPanel  implements ActionListener {
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.ImageIcon;
+import javax.swing.JPanel;
+import javax.swing.Timer;
 
-    private final int INITIAL_X = -40;
-    private final int INITIAL_Y = -40;
-    private final int DELAY = 25;
-
+public class Board extends JPanel implements ActionListener {
+    private int posicionX = 10;
+    int posicionY = 390;
+    int posicionXRectangulo = 410;
+    int posicionYRectangulo = 410;
+    int xGato=0;
+    int numImagenGato;
+    private int delay = 25;
     private Timer timer;
-    private int x, y;
-
-    public Board() {
-        initBoard();
-    }
-
-    private void initBoard() {
-        setBackground(Color.WHITE);
-       
-        x = INITIAL_X;
-        y = INITIAL_Y;
-        //Fires one or more ActionEvents at specified intervals.
-        timer = new Timer(DELAY, this);
+    
+    public Board(){
+        timer = new Timer(this.delay,this);
         timer.start();
     }
-
+    
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.setColor(Color.RED);
-        g2d.fillOval(x, y, 30, 30);
+        g.setColor(Color.BLUE);
+        
+        Image fondo = loadImage("fondo.png");
+        g.drawImage(fondo, 0, 0, this);
+        
+        g.drawString("Puntaje", 100, 100);
+        int x[] = {20+posicionX,30+posicionX,50+posicionX,60+posicionX};
+        int y[] = {20+posicionY,0+posicionY,0+posicionY,20+posicionY};
+        
+        //Tigre
+        Image gato = loadImage("cats.gif");
+        g.drawImage(gato,xGato, 100, xGato+132, (100+80),
+                numImagenGato*132,0, (numImagenGato*132)+132, 80, this);   
+        //Carro
+        g.fillPolygon(x,y,4);
+        g.fillRect(0+posicionX, 20+posicionY, 80, 20);
+        g.setColor(Color.BLACK);
+        g.fillOval(20+posicionX, 40+posicionY, 10, 10);
+        g.fillOval(50+posicionX, 40+posicionY, 10, 10);
+        
+        g.drawRect(0+posicionX, 0+posicionY, 80, 50);
+        Rectangle carro = new Rectangle(0+posicionX,0+posicionY,80,50);
+        //Circulo
+        g.drawRect(50+posicionXRectangulo, 0+posicionYRectangulo, 30, 30);
+        Rectangle oval = new Rectangle(50+posicionXRectangulo,0+posicionYRectangulo,30,30);
+        g.fillOval(50+posicionXRectangulo, posicionYRectangulo, 30, 30);
+        
+        if(carro.intersects(oval)){
+//            this.timer.stop();
+        };
     }
 
-   
     @Override
     public void actionPerformed(ActionEvent e) {
-        x += 1;
-        y += 1;
-       repaint();
+        this.posicionX +=1;
+        this.xGato +=1;
+        if(this.numImagenGato==6){
+            this.numImagenGato=0;
+        }else{
+            this.numImagenGato++;
+        };
+        this.posicionY +=1;
+        this.posicionXRectangulo -=1;
+        repaint();
+    }
+    
+    public Image loadImage(String imageName){
+        ImageIcon ii = new ImageIcon(imageName);
+        Image image  = ii.getImage();
+        return image;
     }
 }
